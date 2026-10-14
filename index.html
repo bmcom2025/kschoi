@@ -1,347 +1,80 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 제주 올레길 인터렉티브 가이드</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background-color: #f8fafc;
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            overflow-x: hidden;
-        }
-        canvas {
-            cursor: pointer;
-            background-color: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-            max-width: 100%;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-        .tooltip {
-            position: absolute;
-            pointer-events: none;
-            background: rgba(255, 255, 255, 0.98);
-            padding: 12px;
-            border-radius: 10px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            display: none;
-            z-index: 100;
-            border: 1px solid #e2e8f0;
-        }
-        .info-panel {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateY(100%);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .info-panel.active {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-    </style>
-</head>
-<body class="flex flex-col items-center p-4 md:p-8 pb-32">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 감정 토닥이 자판기 | 수업 활동</title><style>
+:root{--navy:#172b50;--blue:#315aa3;--yellow:#ffda55;--coral:#ff8b80;--bg:#f5f7fc;--line:#dce3ef;--muted:#64748b}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:'Pretendard','Malgun Gothic',Arial,sans-serif;color:#1b2943;line-height:1.55}button,input,textarea,select{font:inherit}button{cursor:pointer}.shell{max-width:1200px;margin:auto;padding:20px}.hero{background:linear-gradient(110deg,#172b50,#325da5);border-radius:22px;padding:28px;color:white;display:flex;gap:20px;justify-content:space-between;align-items:center}.hero h1{margin:3px 0;font-size:clamp(25px,3vw,39px)}.hero p{margin:0;color:#dbeafe}.hero .art{font-size:72px}.pill{display:inline-block;background:#ffffff24;padding:5px 11px;border-radius:99px;font-size:12px}.nav{display:flex;gap:7px;overflow:auto;padding:15px 0;position:sticky;top:0;background:var(--bg);z-index:5}.nav button{border:1px solid var(--line);background:white;padding:10px 15px;border-radius:12px;white-space:nowrap;font-weight:700;color:#40516b}.nav button.active{background:var(--navy);color:white;border-color:var(--navy)}section.panel{display:none;background:white;border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 8px 25px #1a376014}section.panel.active{display:block}h2{font-size:25px;margin:0 0 5px;color:var(--navy)}h3{font-size:18px;margin:18px 0 9px}.lead{color:var(--muted);margin:0 0 20px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.card{border:1px solid var(--line);border-radius:15px;padding:17px;background:#fff}.tint{background:#f7faff}.joy{background:#fff9de;border-color:#f1d780}.sad{background:#fff0ee;border-color:#ffc2b9}.tag{display:inline-block;padding:3px 9px;border-radius:8px;background:#e8eefc;font-size:12px;font-weight:800}.tag.yellow{background:#fff0a9}.tag.red{background:#ffd5d1}.callout{background:#f0f5ff;border-left:5px solid var(--blue);border-radius:10px;padding:14px;margin:14px 0}.prompt{font-size:19px;font-weight:800;color:var(--navy)}label{display:block;font-size:14px;font-weight:700;margin:12px 0 5px}input[type=text],textarea,select{width:100%;border:1px solid #c8d3e5;border-radius:10px;padding:11px;background:white;color:#1b2943}textarea{min-height:76px;resize:vertical}.btn{background:var(--blue);color:white;border:0;border-radius:10px;padding:10px 15px;font-weight:700}.btn.alt{background:#e9effb;color:#243d72}.btn.warn{background:#fff1bd;color:#77551b}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.num{background:var(--yellow);color:var(--navy);border-radius:50%;width:32px;height:32px;display:grid;place-items:center;font-weight:900;flex-shrink:0}.flow{display:flex;flex-direction:column;align-items:center;gap:7px;margin:16px auto;max-width:760px}.node{padding:12px 20px;text-align:center;border:2px solid var(--blue);border-radius:12px;background:#f4f7ff;min-width:240px}.arrow{font-size:24px;color:var(--blue);line-height:1}.diamond{background:#fff8d7;border:2px solid #c9941c;padding:16px 25px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);height:120px;width:260px;display:grid;place-items:center;text-align:center;font-weight:800}.branches{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}.branch{border-radius:12px;padding:15px;text-align:center;border:2px solid #e5eaf2}.branch strong{display:block;margin-bottom:7px}.branch .item{font-size:18px;font-weight:800}.code{background:#142540;color:#f3f7ff;padding:18px;border-radius:13px;white-space:pre-wrap;line-height:1.8;font-family:Consolas,'Malgun Gothic',monospace;font-size:14px}.small{font-size:13px;color:var(--muted)}.progress{height:9px;background:#e9eef7;border-radius:10px;overflow:hidden}.bar{height:100%;background:#4d82d8;width:0;transition:width .2s}.testResult{font-size:19px;font-weight:800;padding:15px;border-radius:13px;background:#f1f5fb;min-height:85px}.q{border-bottom:1px solid var(--line);padding:12px 0}.q:last-child{border:0}.q label{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500;margin:7px 0}.q input[type=checkbox]{width:18px;height:18px}footer{color:#74829b;text-align:center;padding:22px;font-size:12px}@media(max-width:720px){.grid,.three,.branches{grid-template-columns:1fr}.hero{padding:20px}.hero .art{font-size:45px}section.panel{padding:16px}.shell{padding:10px}}@media print{.nav,.actions,.btn,.hero .art{display:none!important}section.panel{display:block!important;break-before:page;box-shadow:none;border:0}body{background:white}.shell{max-width:none}.hero{color:#172b50;background:white;border-bottom:2px solid #172b50}}
 
-    <header class="text-center mb-8">
-        <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Jeju Olle Trail <span class="text-blue-600">2025</span></h1>
-        <p class="text-slate-500 font-medium text-lg">코스를 클릭하여 주변 관광지와 맛집 정보를 확인하세요</p>
-        
-        <div class="mt-6 flex flex-wrap justify-center gap-4 text-xs md:text-sm font-semibold">
-            <span class="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-100">
-                <span class="w-3 h-3 bg-blue-500 rounded-full"></span> 동부 해안
-            </span>
-            <span class="flex items-center gap-2 px-3 py-1 bg-orange-50 text-orange-700 rounded-full border border-orange-100">
-                <span class="w-3 h-3 bg-orange-500 rounded-full"></span> 남부 서귀포
-            </span>
-            <span class="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100">
-                <span class="w-3 h-3 bg-emerald-500 rounded-full"></span> 서부 숲길
-            </span>
-            <span class="flex items-center gap-2 px-3 py-1 bg-purple-50 text-purple-700 rounded-full border border-purple-100">
-                <span class="w-3 h-3 bg-purple-500 rounded-full"></span> 북부 제주시
-            </span>
-        </div>
-    </header>
+/* Animated vending-machine classroom demonstration */
+.vm-layout{display:grid;grid-template-columns:minmax(240px,1fr) minmax(250px,1fr);gap:18px;align-items:start;margin:18px 0}.vm-machine{position:relative;max-width:370px;margin:auto;width:100%;height:440px;border:9px solid #20395e;border-radius:26px 26px 18px 18px;background:linear-gradient(140deg,#ffe477,#ffc849 55%,#f8ad51);box-shadow:inset -9px -7px #e99a3d,10px 14px 0 #d9e1ee;overflow:hidden}.vm-title{position:absolute;left:12%;top:15px;width:76%;border-radius:12px;background:#213d6d;color:white;text-align:center;padding:10px;font-weight:900;letter-spacing:1px}.vm-window{position:absolute;left:9%;top:77px;width:59%;height:190px;border:8px solid #20395e;border-radius:15px;background:linear-gradient(#e5f6ff,#b5ddf2);display:flex;align-items:center;justify-content:center;gap:10px;overflow:hidden}.vm-stock{font-size:58px;filter:drop-shadow(2px 5px 1px #6e8ca7)}.vm-controls{position:absolute;right:6%;top:95px;width:21%;display:flex;flex-direction:column;align-items:center;gap:12px}.vm-led{background:#243c62;border:5px solid #102c50;border-radius:10px;width:78px;height:78px;padding:7px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.vm-dot{background:#465c79;border-radius:50%;aspect-ratio:1}.vm-dot.on{background:#ffec6a;box-shadow:0 0 6px #fff5a1}.vm-key{background:#fff8df;border:3px solid #20395e;border-radius:9px;padding:8px 4px;font-weight:900;font-size:12px;text-align:center;width:72px}.vm-slot{position:absolute;bottom:31px;left:17%;width:66%;height:82px;border:10px solid #1b3358;background:#162b4c;border-radius:12px;box-shadow:inset 0 12px 8px #07192e;display:flex;align-items:center;justify-content:center}.vm-gift{font-size:54px;opacity:0;transform:translateY(-130px) scale(.6);filter:drop-shadow(0 5px 2px #091a34)}.vm-gift.deliver{animation:vmDrop 1.2s cubic-bezier(.22,.65,.3,1.2) forwards}.vm-speech{background:#fff;border:2px solid #cfddf1;border-radius:14px;padding:15px;min-height:75px;font-size:17px;font-weight:700}.vm-status{color:#3b537b;font-size:14px;margin:8px 0}.vm-label{font-size:12px;font-weight:800;color:#20395e}.vm-stage{border:1px solid #dce3ef;background:#f7faff;border-radius:18px;padding:18px}.vm-result{margin-top:12px;padding:12px;border-radius:12px;background:#eef4ff;min-height:48px}.vm-running{animation:vmPulse .7s ease-in-out 2}@keyframes vmDrop{0%{opacity:0;transform:translateY(-130px) scale(.6)}55%{opacity:1;transform:translateY(4px) scale(1.2)}78%{transform:translateY(-13px) scale(.95)}100%{opacity:1;transform:translateY(0) scale(1)}}@keyframes vmPulse{50%{filter:brightness(1.22)}}@media(max-width:740px){.vm-layout{grid-template-columns:1fr}.vm-machine{height:405px;max-width:330px}.vm-window{height:170px}.vm-controls{right:7%}.vm-led{width:65px;height:65px}.vm-key{width:62px}}
+</style></head><body><div class="shell"><header class="hero"><div><span class="pill">2026 배명중학교 · AI중점학교 · 정보과</span><h1>AI 감정 토닥이 자판기 만들기</h1><p>데이터 수집 → AI 학습 → 선택 구조 재설계 → 엔트리·마이크로비트 구현</p></div><div class="art" aria-hidden="true">🏪🤖</div></header><nav class="nav" id="nav"></nav>
+<section class="panel active" id="p0"><h2>🎯 오늘의 메이커 미션</h2><p class="lead">지난 시간의 음료수 자판기를 감정을 분류하는 AI 자판기로 발전시켜 봅시다.</p><div class="grid three"><div class="card"><span class="tag">BRAIN · 1</span><h3>감정 데이터 모으기</h3><p>기쁨·슬픔 표현을 모아 AI가 학습할 데이터를 준비합니다.</p></div><div class="card"><span class="tag">LOGIC · 2</span><h3>선택 구조 설계하기</h3><p>AI 분류 결과를 조건으로 사용하는 순서도를 완성합니다.</p></div><div class="card"><span class="tag">HARDWARE · 3</span><h3>자판기 구현하기</h3><p>엔트리로 아이템·메시지를 출력하고 LED 표정을 연결합니다.</p></div></div><div class="callout"><strong>오늘의 학습 목표</strong><br>① 감정 데이터를 수집하고 AI 모델을 학습한다.<br>② AI 분류 결과를 조건으로 선택 구조를 설계한다.<br>③ 엔트리와 마이크로비트로 서로 다른 출력을 구현하고 검증한다.</div></section>
+<section class="panel" id="p1"><h2>💬 도입 · AI 마음 일기와 자판기의 만남</h2><p class="lead">단순한 음료수 자판기에 AI 감정 분류 기능을 더하면 무엇이 달라질까요?</p><div class="callout"><strong>🧠 심스페이스(SimSpace) 앱이란?</strong><br>AI를 활용한 예시 앱을 살펴보며, 사용자가 입력한 문장에 따라 서로 다른 반응이 나타나는 과정을 관찰해 봅시다. 이 수업에서는 <strong>AI 마음 일기</strong>를 예로 들어 입력 → 분류 → 출력의 관계를 생각합니다.</div><div class="grid"><div class="card tint"><h3>지난 시간 · 음료수 자판기</h3><p>사용자가 음료를 선택하고 금액을 투입하면, 선택 구조에 따라 음료 배출 여부가 결정됩니다.</p><div class="tag">입력: 음료 선택 + 금액 투입</div></div><div class="card joy"><h3>오늘 · AI 감정 토닥이 자판기</h3><p>감정 표현을 입력하면 AI가 분류하고 그 결과에 따라 선물과 메시지를 출력합니다.</p><div class="tag yellow">입력: 감정 표현</div></div></div><h3>생각 열기</h3><label for="idea">두 자판기를 연결하면 어떤 기능을 만들 수 있을까요?</label><textarea data-save id="idea" placeholder="예: 기쁨에는 내가 좋아하는 아이템을, 슬픔에는 위로가 되는 아이템을... "></textarea><div class="callout prompt">“자판기가 사람의 마음에 따라 다른 선물을 줄 수 있을까?”</div></section>
+<section class="panel" id="p2"><h2>🔀 선택 구조 복습 · 음료 선택과 음료 구입 금액 투입</h2><p class="lead">음료 선택 여부를 확인하고, 투입 금액과 음료 가격을 비교한 뒤 음료와 계산한 잔돈을 함께 배출하는 과정을 살펴봅니다.</p><div class="grid"><div class="card"><h3>① 음료와 금액 설정</h3><label for="oldDrink">선택한 음료</label><select data-save id="oldDrink"><option value="">음료 선택</option><option value="환타">환타</option><option value="콜라">콜라</option><option value="사이다">사이다</option><option value="물">물</option></select><label for="oldPrice">선택한 음료의 가격 (원)</label><input data-save id="oldPrice" type="number" min="0" step="100"><label for="oldPaid">투입 금액 (원)</label><input data-save id="oldPaid" type="number" min="0" step="100"><h3>② 조건과 실행 내용</h3><label for="oldDrinkCond">첫 번째 조건식 · 음료 선택 확인</label><input data-save id="oldDrinkCond" type="text" value="선택한 음료가 판매 목록에 있는가?"><label for="oldCond">두 번째 조건식 · 금액 비교</label><input data-save id="oldCond" type="text" value="투입 금액 ≥ 선택한 음료 가격"><label for="oldYes">예(참)일 때 실행</label><input data-save id="oldYes" type="text" value="선택한 음료와 계산한 잔돈 함께 배출"><label for="oldNo">아니오(거짓)일 때 실행</label><input data-save id="oldNo" type="text" value="금액 부족 안내"><div class="actions"><button class="btn" onclick="updateOld()">순서도에 적용</button><button class="btn alt" onclick="resetOld()">작성 내용 지우기</button></div><div class="callout">음료가 선택되었는지 먼저 확인하고, 선택되었다면 <strong>투입 금액 ≥ 음료 가격</strong>을 판단합니다. 금액이 충분한 경우 <strong>잔돈 = 투입 금액 − 음료 가격</strong>을 계산하고 음료와 잔돈을 함께 배출합니다.</div></div><div class="card tint"><h3>나의 음료수 자판기 순서도</h3><div class="flow"><div class="node">시작</div><div class="arrow">↓</div><div class="node">음료 선택: <strong id="oldDrinkView">＿＿＿</strong></div><div class="arrow">↓</div><div class="node">투입 금액: <strong id="oldPaidView">＿＿＿</strong>원</div><div class="arrow">↓</div><div class="diamond"><span id="oldDrinkCondView">선택한 음료가 판매 목록에 있는가?</span></div><div class="branches"><div class="branch joy"><strong>예 (참) ↓</strong>선택한 음료 가격 확인<br><strong id="oldPriceView">＿＿＿</strong>원</div><div class="branch sad"><strong>아니오 (거짓)</strong>음료 선택 안내 → 종료</div></div><div class="arrow">↓ 예 경로 계속</div><div class="diamond"><span id="oldCondView">투입 금액 ≥ 선택한 음료 가격</span></div><div class="branches"><div class="branch joy"><strong>예 (참)</strong><div class="node" style="min-width:0">연산 처리<br><strong id="oldCalcView">＿＿＿＿＿＿</strong></div><div class="arrow">↓</div><span id="oldYesView">선택한 음료와 계산한 잔돈 함께 배출</span><div id="oldDispense" class="callout" style="margin-bottom:0">음료: ＿＿ / 잔돈: ＿＿원</div></div><div class="branch sad"><strong>아니오 (거짓)</strong><span id="oldNoView">금액 부족 안내</span><div id="oldShortage" class="small">음료와 잔돈 배출 없음</div></div></div><div class="arrow">↓ 각 경로 종료</div><div class="node">종료</div></div><div id="oldCheck" class="callout" aria-live="polite">음료와 금액을 입력하고 순서도에 적용해 보세요.</div></div></div></section>
+<section class="panel" id="p3"><h2>🧠 감정 데이터 공동 수집</h2><p class="lead">공유 시트에는 기쁨·슬픔을 나타내는 표현을 각각 2~3개 입력합니다. 개인의 실제 고민이나 민감한 정보는 쓰지 않습니다.</p><div class="grid"><div class="card joy"><span class="tag yellow">기쁨</span><p>예: 신나, 짜릿해, 완벽해, 행복해</p><label>내가 생각한 기쁨 표현</label><textarea data-save id="joyWords" placeholder="한 줄에 한 표현씩 입력"></textarea></div><div class="card sad"><span class="tag red">슬픔</span><p>예: 우울해, 속상해, 눈물나, 서운해</p><label>내가 생각한 슬픔 표현</label><textarea data-save id="sadWords" placeholder="한 줄에 한 표현씩 입력"></textarea></div></div><div class="actions"><button class="btn" onclick="downloadCSV()">내 연습 데이터 CSV 저장</button><button class="btn alt" onclick="copyData()">공유 시트용 데이터 복사</button></div><div class="callout"><strong>데이터 설계 규칙</strong><br>① 두 범주의 데이터 수를 비슷하게 맞추기<br>② 서로 다른 표현을 다양하게 모으기<br>③ 개인정보·민감 정보 입력하지 않기</div><p class="small">이 화면의 CSV는 학생 개인 연습용입니다. 수업의 공동 데이터는 구글 공유 시트에서 모으고 교사가 검수합니다. 엔트리의 CSV 직접 가져오기 가능 여부와 요구 형식은 사전에 확인해야 합니다.</p></section>
+<section class="panel" id="p4"><h2>🧪 AI 모델 학습과 검증</h2><p class="lead">교사가 준비한 데이터를 활용하여 엔트리에서 텍스트 분류 모델을 학습하고 새로운 표현을 테스트합니다.</p><div class="step"><span class="num">1</span><div>공동으로 수집한 기쁨·슬픔 데이터를 확인한다.</div></div><div class="step"><span class="num">2</span><div>엔트리 AI 텍스트 분류 모델을 학습한다.</div></div><div class="step"><span class="num">3</span><div>학습에 사용하지 않은 표현을 입력하고 결과를 확인한다.</div></div><div class="grid"><div class="card"><label>시험해 본 감정 표현</label><input data-save id="aiTest" type="text" placeholder="예: 뿌듯해"><label>엔트리 AI의 실제 분류 결과</label><select data-save id="aiPredict"><option value="">결과 선택</option><option>기쁨</option><option>슬픔</option></select></div><div class="card"><label>예상과 다른 결과가 나왔다면 이유는?</label><textarea data-save id="aiWhy" placeholder="예: 학습 데이터가 부족하거나 표현이 다양하지 않아서..."></textarea></div></div><div class="callout">AI가 분류한 결과는 <strong>학습 데이터에 따른 예측</strong>입니다. 사람의 실제 감정을 확정하거나 진단하는 결과가 아닙니다.</div></section>
+<section class="panel" id="p5"><h2>🧩 AI 선택 구조 알고리즘 설계</h2><p class="lead">기존 자판기의 조건을 'AI 분류 결과가 기쁨인가?'로 바꾸고, 두 경로의 출력을 직접 설계합니다.</p><div class="grid"><div class="card"><label>기쁨일 때 받을 아이템</label><input data-save id="joyItem" type="text" value="행복 충전 아이템"><label>기쁨일 때 출력할 응원 메시지</label><input data-save id="joyMsg" type="text" value="행복 에너지 +100!"><label>슬픔일 때 받을 아이템</label><input data-save id="sadItem" type="text" value="마음 회복 아이템"><label>슬픔일 때 출력할 위로 메시지</label><input data-save id="sadMsg" type="text" value="토닥토닥, 쉬어도 괜찮아."><div class="actions"><button class="btn" onclick="updateDesign()">내 설계 적용</button><button class="btn alt" onclick="saveSVG()">순서도 SVG 저장</button></div></div><div class="card tint"><div class="flow" id="diagram"><div class="node">감정 표현 입력</div><div class="arrow">↓</div><div class="node">AI 텍스트 분류</div><div class="arrow">↓</div><div class="diamond">분류 결과가<br>기쁨인가?</div><div class="branches"><div class="branch joy"><strong>예 · 기쁨</strong><div class="item" id="jiv">행복 충전 아이템</div><div id="jmv">행복 에너지 +100!</div><div>😊 LED 웃는 얼굴</div></div><div class="branch sad"><strong>아니오 · 슬픔</strong><div class="item" id="siv">마음 회복 아이템</div><div id="smv">토닥토닥, 쉬어도 괜찮아.</div><div>❤️ LED 하트</div></div></div><div class="arrow">↓</div><div class="node">종료</div></div></div></div><h3>나의 의사코드</h3><div class="code" id="pseudo"></div><p class="small">이 알고리즘은 AI 모델이 '기쁨' 또는 '슬픔' 두 범주 중 하나를 반환한다고 가정한 수업용 예시입니다.</p></section>
+<section class="panel" id="p6"><h2>💻 엔트리 코딩 · 자판기에 생명 불어넣기</h2><p class="lead">기존 자판기 코드를 모두 지우지 말고, 조건식과 출력 부분을 바꾸어 봅시다.</p><div class="callout"><strong>필수 우선순위</strong><br>1순위 · AI 분류 결과를 엔트리 조건문에 연결<br>2순위 · 화면에 알맞은 아이템과 메시지 출력<br>최종 목표 · 마이크로비트 LED 표정 표시</div><div class="grid"><div class="card"><h3>필수 미션</h3><div id="checks"></div><div class="progress"><div class="bar" id="progress"></div></div><p class="small" id="progressText">0 / 5 완료</p></div><div class="card"><h3>도전 미션</h3><label><input type="checkbox" data-check="bonus1"> 아이템 배출 효과음 추가</label><label><input type="checkbox" data-check="bonus2"> 반짝이는 애니메이션</label><label><input type="checkbox" data-check="bonus3"> 랜덤 응원·위로 메시지</label><h3>마이크로비트 연결 확인</h3><p>USB·브라우저·하드웨어 연결 상태를 점검하고 LED 출력 명령을 테스트합니다.</p></div></div><p class="small">엔트리 블록 명칭과 하드웨어 연결 방법은 실제 수업 환경에서 사전 확인이 필요합니다. 연결 오류가 나면 화면 출력까지 완성한 뒤 LED는 교사 시연 또는 후속 활동으로 진행합니다.</p></section>
+<section class="panel" id="p7"><h2>🕹️ 자판기 테스트 · 실제처럼 작동시키기</h2><p class="lead">감정 단어나 문장을 입력한 뒤 <strong>자판기 작동!</strong>을 눌러 보세요. 감정 분석 → 조건 판단 → 아이템 배출 → 메시지 → LED 표시가 순서대로 실행됩니다. <strong>이 화면은 단어 규칙을 사용하는 체험용 모의 실행</strong>이며 실제 AI 모델과 마이크로비트는 엔트리에서 실행합니다.</p>
+<div class="vm-layout"><div class="vm-stage"><div class="vm-machine" id="vmMachine" aria-label="감정 토닥이 자판기 애니메이션"><div class="vm-title">AI 마음 토닥 자판기 💛</div><div class="vm-window"><span class="vm-stock">🎁</span><span class="vm-stock">💝</span></div><div class="vm-controls"><span class="vm-label">LED 표정</span><div class="vm-led" id="vmLED" aria-label="5 곱하기 5 LED 표시"></div><div class="vm-key">AI READY</div></div><div class="vm-slot"><span class="vm-gift" id="vmGift">🎁</span></div></div><p class="small" style="text-align:center">아이템이 아래 배출구로 떨어지는 모습을 확인하세요.</p></div>
+<div class="card"><h3>① 감정 표현 입력</h3><label for="vmInput">입력할 감정 단어 또는 문장</label><input id="vmInput" type="text" placeholder="예: 오늘 정말 신나!" value="행복해" onkeydown="if(event.key==='Enter')runMock()"><p class="small">입력 문장의 감정 단어를 자동으로 찾아 기쁨·슬픔 경로를 실행합니다. (학습된 AI 모델이 아닌 <strong>규칙 기반 시뮬레이션</strong>)</p><div class="vm-status" id="vmAnalysis">🤖 분석 대기 중</div><div class="actions"><button class="btn" id="vmRunBtn" onclick="runMock()">▶ 자판기 작동!</button><button class="btn alt" onclick="resetMachine()">↺ 다시 테스트</button></div><div class="vm-status" id="vmStatus" aria-live="polite">준비 완료 · 감정 표현을 입력해 주세요.</div><div class="vm-speech" id="vmSpeech" aria-live="polite">💬 어떤 선물이 나올까요?</div><div class="vm-result" id="mockResult" aria-live="polite">분류 결과에 따라 아이템·메시지·LED가 달라집니다.</div><div class="callout"><strong>테스트 미션</strong><br>기쁨 표현과 슬픔 표현을 각각 입력해 보고, 아이템·말하기·LED가 서로 다르게 작동하는지 확인해 보세요. 예: 신나 / 속상해</div></div></div>
+<div class="grid"><div class="card tint"><h3>실제 엔트리 테스트 기록</h3><label>기쁨 입력 시 작동 결과</label><textarea data-save id="realJoy" placeholder="아이템·메시지·LED가 정상 출력되었나요?"></textarea><label>슬픔 입력 시 작동 결과</label><textarea data-save id="realSad" placeholder="아이템·메시지·LED가 정상 출력되었나요?"></textarea></div><div class="card"><h3>내가 설계한 출력 바꾸기</h3><p>‘알고리즘 설계’ 메뉴에서 기쁨·슬픔 아이템과 메시지를 변경하면 이 자판기 테스트에도 반영됩니다.</p><button class="btn alt" onclick="show(5)">✏️ 알고리즘 설계로 이동</button></div></div></section>
+<section class="panel" id="p8"><h2>🔍 디버깅과 AI 윤리 · 정리</h2><p class="lead">오류를 찾아 개선하고 AI의 판단을 비판적으로 살펴봅니다.</p><div class="grid"><div class="card"><h3>검증 질문</h3><div class="q">① AI 분류 결과에 따라 두 경로가 다르게 실행되었나요?</div><div class="q">② 아이템·메시지·LED가 모두 예상대로 나왔나요?</div><div class="q">③ 오류가 있었다면 원인은 데이터, 조건식, 출력 명령 중 어디에 있었나요?</div><label>내가 발견한 문제와 해결 방법</label><textarea data-save id="debug" placeholder="예: 기쁨으로 잘못 분류되어 학습 데이터를 보완했다."></textarea></div><div class="card"><h3>AI가 실수한다면?</h3><div class="callout">“걱정되지만 기대돼”<br><strong>이 문장에 기쁨과 슬픔이 함께 있다면 AI는 어떻게 판단할까요?</strong></div><p>두 범주만 학습한 AI는 한쪽으로 분류할 수 있습니다. 그렇다고 다른 감정이 없는 것은 아닙니다.</p><label>AI 분류 결과를 그대로 믿어도 될까요? 이유를 적어 보세요.</label><textarea data-save id="ethics" placeholder="AI의 판단은 학습 데이터에 따라 달라질 수 있기 때문에..."></textarea></div></div><h3>오늘의 한 줄 소감</h3><textarea data-save id="reflection" placeholder="오늘 알게 된 점이나 다음 시간에 개선하고 싶은 기능"></textarea><div class="actions"><button class="btn" onclick="downloadRecord()">활동 기록 TXT 저장</button><button class="btn alt" onclick="window.print()">인쇄 / PDF 저장</button><button class="btn warn" onclick="clearAll()">내 입력 초기화</button></div></section>
+<footer>배명중학교 AI중점학교 · 수업 활동용 웹앱 | 개인 입력 내용은 현재 브라우저에 저장되며 서버로 전송되지 않습니다.</footer></div><script>
+const names=['수업 안내','동기유발','선택 구조 복습','감정 데이터','AI 모델 학습','알고리즘 설계','엔트리·LED','자판기 테스트','정리·제출'];const nav=document.getElementById('nav');names.forEach((name,i)=>{const b=document.createElement('button');b.textContent=`${i+1}. ${name}`;b.onclick=()=>show(i);nav.appendChild(b)});function show(i){document.querySelectorAll('.panel').forEach((e,n)=>e.classList.toggle('active',n===i));[...nav.children].forEach((e,n)=>e.classList.toggle('active',n===i));window.scrollTo({top:0,behavior:'smooth'})}show(0);
 
-    <div class="relative w-full max-w-5xl">
-        <canvas id="olleMap"></canvas>
-        <div id="tooltip" class="tooltip"></div>
-    </div>
-
-    <!-- 상세 정보 패널 -->
-    <div id="infoPanel" class="info-panel fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-3xl bg-white rounded-t-3xl shadow-[0_-20px_50px_-12px_rgba(0,0,0,0.15)] border-t border-slate-100 overflow-hidden z-[200]">
-        <div id="panelHeader" class="h-2 w-full"></div>
-        <div class="p-6 md:p-10 max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-start mb-6">
-                <div>
-                    <span id="courseId" class="text-xs font-bold px-2 py-1 rounded border mb-2 inline-block"></span>
-                    <h2 id="courseName" class="text-3xl font-black text-slate-900"></h2>
-                </div>
-                <button onclick="closePanel()" class="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-3 gap-3 mb-8">
-                <div class="bg-slate-50 p-4 rounded-2xl text-center border border-slate-100">
-                    <span class="block text-[10px] text-slate-400 font-bold uppercase mb-1">거리</span>
-                    <span id="courseDist" class="text-xl font-bold text-slate-800 tracking-tight"></span>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl text-center border border-slate-100">
-                    <span class="block text-[10px] text-slate-400 font-bold uppercase mb-1">예상 시간</span>
-                    <span id="courseTime" class="text-xl font-bold text-slate-800 tracking-tight"></span>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-2xl text-center border border-slate-100">
-                    <span class="block text-[10px] text-slate-400 font-bold uppercase mb-1">주요 테마</span>
-                    <span id="courseType" class="text-sm font-bold text-slate-800">해안길</span>
-                </div>
-            </div>
-
-            <div class="space-y-8">
-                <!-- 관광지 -->
-                <div>
-                    <h3 class="flex items-center gap-2 font-bold text-slate-800 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        </span>
-                        주변 명소
-                    </h3>
-                    <p id="courseAttractions" class="text-slate-600 leading-relaxed text-sm bg-slate-50/50 p-4 rounded-xl border border-dashed border-slate-200"></p>
-                </div>
-
-                <!-- 맛집 -->
-                <div>
-                    <h3 class="flex items-center gap-2 font-bold text-slate-800 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                        </span>
-                        추천 맛집 & 카페
-                    </h3>
-                    <p id="courseFoods" class="text-slate-600 leading-relaxed text-sm bg-slate-50/50 p-4 rounded-xl border border-dashed border-slate-200"></p>
-                </div>
-            </div>
-
-            <div class="mt-10 pt-6 border-t border-slate-100">
-                <button class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold hover:shadow-lg transition-all active:scale-[0.98]">코스 정보 상세보기</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('olleMap');
-        const ctx = canvas.getContext('2d');
-        const tooltip = document.getElementById('tooltip');
-        const infoPanel = document.getElementById('infoPanel');
-
-        const colors = {
-            east: { main: '#3b82f6', light: '#eff6ff', type: '해안 절경' },
-            south: { main: '#f97316', light: '#fff7ed', type: '도시 및 바다' },
-            west: { main: '#10b981', light: '#ecfdf5', type: '숲과 곶자왈' },
-            north: { main: '#a855f7', light: '#faf5ff', type: '마을과 역사' }
-        };
-
-        const olleData = [
-            { 
-                id: "1", name: "시흥-광치기", dist: 15.1, time: "4~5시간", x: 0.88, y: 0.42, theme: colors.east, 
-                attractions: "말미오름(두산봉)에서 바라보는 성산일출봉 전경이 압권입니다. 광치기해변의 이끼 낀 암반은 사진 촬영 명소입니다.",
-                foods: "해녀의집(전복죽), 성산 가시아방(고기국수), 카페 도너츠윤(성산점)"
-            },
-            { 
-                id: "1-1", name: "우도", dist: 11.3, time: "4~5시간", x: 0.94, y: 0.35, theme: colors.east, 
-                attractions: "산호해변(서빈백사), 우도봉, 하고수동해수욕장의 맑은 물빛을 즐길 수 있습니다.",
-                foods: "로뎀가든(한라산볶음밥), 하하호호(수제버거), 우도 땅콩 아이스크림"
-            },
-            { 
-                id: "6", name: "쇠소깍-여행자센터", dist: 11.0, time: "3~4시간", x: 0.50, y: 0.85, theme: colors.south, 
-                attractions: "민물과 바닷물이 만나는 쇠소깍의 기암괴석과 정방폭포, 서귀포 올레시장을 지납니다.",
-                foods: "오는정김밥, 유동커피, 서귀포 매일올레시장 먹거리(마늘치킨)"
-            },
-            { 
-                id: "7", name: "여행자센터-월평", dist: 17.6, time: "5~6시간", x: 0.42, y: 0.86, theme: colors.south, 
-                attractions: "외돌개와 황우지 해안(선녀탕), 법환포구의 평화로운 어촌 풍경이 매력적입니다.",
-                foods: "테라로사 서귀포점, 진주식당(오뚝뚝배기), 법환포구 막횟집"
-            },
-            { 
-                id: "10", name: "화순-모슬포", dist: 15.6, time: "5~6시간", x: 0.18, y: 0.82, theme: colors.south, 
-                attractions: "산방산 아래 용머리해안과 송악산 둘레길을 걷습니다. 일제강점기 유적지도 포함되어 있습니다.",
-                foods: "산방식당(밀면), 중앙식당(성게보말국), 모슬포항 방어회(겨울철)"
-            },
-            { 
-                id: "12", name: "무릉-용수", dist: 17.5, time: "5~6시간", x: 0.08, y: 0.62, theme: colors.west, 
-                attractions: "차귀도가 보이는 생이기정길 해안 절벽 산책로가 제주 올레길 중 손꼽히는 절경입니다.",
-                foods: "수월봉 입구 카페들, 신도리 마을 식당(정식), 용수포구 근처 해산물"
-            },
-            { 
-                id: "14", name: "저지-한림", dist: 19.1, time: "6~7시간", x: 0.18, y: 0.40, theme: colors.west, 
-                attractions: "월령리 선인장 군락지와 협재, 금능해수욕장의 에메랄드빛 바다를 만끽합니다.",
-                foods: "수우동(자작냉우동), 안녕협재씨, 명랑스낵(떡볶이/튀김)"
-            },
-            { 
-                id: "17", name: "광령-제주원도심", dist: 18.1, time: "6~7시간", x: 0.48, y: 0.25, theme: colors.north, 
-                attractions: "이호테우해변의 목마 등대와 도두봉 키세스존, 용두암, 동문시장을 경유합니다.",
-                foods: "자매국수(고기국수), 우진해장국(고사리육개장), 동문시장 야시장"
-            },
-            { 
-                id: "20", name: "김녕-하도", dist: 17.6, time: "5~6시간", x: 0.78, y: 0.35, theme: colors.north, 
-                attractions: "월정리 카페거리와 세화해변, 김녕 성세기해변의 하얀 모래사장이 이어집니다.",
-                foods: "명진전복, 런던베이글뮤지엄 제주, 곰막(회국수)"
-            }
-        ];
-
-        // 부족한 코스 데이터 보충 (나머지 코스들도 유사한 방식으로 데이터가 채워집니다)
-        const allIds = ["2","3","4","5","8","9","11","13","15","16","18","19","21"];
-        allIds.forEach(id => {
-            const theme = parseInt(id) < 6 ? colors.east : (parseInt(id) < 11 ? colors.south : (parseInt(id) < 16 ? colors.west : colors.north));
-            olleData.push({
-                id: id,
-                name: "주요 올레길 " + id + "코스",
-                dist: 15 + Math.random()*5,
-                time: "5~6시간",
-                x: 0.1 + Math.random()*0.8,
-                y: 0.2 + Math.random()*0.7,
-                theme: theme,
-                attractions: "코스 주변의 아름다운 마을 풍경과 숨겨진 해안가 포인트가 매력적입니다.",
-                foods: "지역 주민들이 즐겨 찾는 로컬 정식집과 분위기 좋은 바다 뷰 카페가 위치해 있습니다."
-            });
-        });
-
-        // 좌표 정렬 (지도 배치를 위해 기존 좌표 시스템 유지)
-        const sortedData = [
-            { id: "1", x: 0.88, y: 0.42 }, { id: "1-1", x: 0.94, y: 0.35 }, { id: "2", x: 0.86, y: 0.52 }, { id: "3", x: 0.80, y: 0.65 },
-            { id: "4", x: 0.70, y: 0.75 }, { id: "5", x: 0.60, y: 0.82 }, { id: "6", x: 0.50, y: 0.85 }, { id: "7", x: 0.42, y: 0.86 },
-            { id: "8", x: 0.32, y: 0.84 }, { id: "9", x: 0.25, y: 0.80 }, { id: "10", x: 0.18, y: 0.82 }, { id: "11", x: 0.10, y: 0.75 },
-            { id: "12", x: 0.08, y: 0.62 }, { id: "13", x: 0.12, y: 0.50 }, { id: "14", x: 0.18, y: 0.40 }, { id: "15", x: 0.28, y: 0.32 },
-            { id: "16", x: 0.38, y: 0.28 }, { id: "17", x: 0.48, y: 0.25 }, { id: "18", x: 0.58, y: 0.26 }, { id: "19", x: 0.68, y: 0.30 },
-            { id: "20", x: 0.78, y: 0.35 }, { id: "21", x: 0.85, y: 0.38 }
-        ];
-
-        olleData.forEach(d => {
-            const pos = sortedData.find(s => s.id === d.id);
-            if(pos) { d.x = pos.x; d.y = pos.y; }
-        });
-
-        let width, height;
-        let selectedCourse = null;
-
-        function resize() {
-            width = canvas.parentElement.clientWidth;
-            height = width * 0.6;
-            canvas.width = width;
-            canvas.height = height;
-            draw();
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.beginPath();
-            ctx.moveTo(width * 0.1, height * 0.7);
-            ctx.bezierCurveTo(width * 0.05, height * 0.5, width * 0.3, height * 0.1, width * 0.5, height * 0.2);
-            ctx.bezierCurveTo(width * 0.8, height * 0.2, width * 0.95, height * 0.4, width * 0.9, height * 0.6);
-            ctx.bezierCurveTo(width * 0.85, height * 0.9, width * 0.4, height * 0.95, width * 0.1, height * 0.7);
-            ctx.fillStyle = '#f8fafc';
-            ctx.fill();
-            ctx.strokeStyle = '#f1f5f9';
-            ctx.lineWidth = 10;
-            ctx.stroke();
-
-            // 코스 포인트
-            olleData.forEach(d => {
-                const px = d.x * width;
-                const py = d.y * height;
-                const isSelected = selectedCourse && selectedCourse.id === d.id;
-                
-                ctx.beginPath();
-                ctx.arc(px, py, isSelected ? 12 : 6, 0, Math.PI * 2);
-                ctx.fillStyle = isSelected ? d.theme.main : 'white';
-                ctx.fill();
-                ctx.strokeStyle = d.theme.main;
-                ctx.lineWidth = isSelected ? 0 : 2;
-                ctx.stroke();
-
-                if(!isSelected) {
-                    ctx.beginPath();
-                    ctx.arc(px, py, 3, 0, Math.PI * 2);
-                    ctx.fillStyle = d.theme.main;
-                    ctx.fill();
-                }
-
-                if(isSelected || ["1", "6", "12", "17"].includes(d.id)) {
-                    ctx.fillStyle = isSelected ? '#1e293b' : d.theme.main;
-                    ctx.font = isSelected ? 'bold 12px sans-serif' : 'bold 10px sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(d.id, px, py - (isSelected ? 18 : 12));
-                }
-            });
-        }
-
-        window.closePanel = function() {
-            selectedCourse = null;
-            infoPanel.classList.remove('active');
-            draw();
-        };
-
-        canvas.addEventListener('click', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            
-            let clicked = null;
-            olleData.forEach(d => {
-                const px = d.x * width;
-                const py = d.y * height;
-                const dist = Math.sqrt((px - mouseX)**2 + (py - mouseY)**2);
-                if(dist < 15) clicked = d;
-            });
-
-            if(clicked) {
-                selectedCourse = clicked;
-                showCourseInfo(clicked);
-                draw();
-            } else {
-                closePanel();
-            }
-        });
-
-        function showCourseInfo(course) {
-            document.getElementById('panelHeader').style.backgroundColor = course.theme.main;
-            document.getElementById('courseId').innerText = `Olle Course ${course.id}`;
-            document.getElementById('courseId').style.color = course.theme.main;
-            document.getElementById('courseId').style.borderColor = course.theme.main;
-            document.getElementById('courseName').innerText = course.name;
-            document.getElementById('courseDist').innerText = `${parseFloat(course.dist).toFixed(1)}km`;
-            document.getElementById('courseTime').innerText = course.time;
-            document.getElementById('courseType').innerText = course.theme.type;
-            document.getElementById('courseAttractions').innerText = course.attractions;
-            document.getElementById('courseFoods').innerText = course.foods;
-            
-            infoPanel.classList.add('active');
-        }
-
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            let found = false;
-            olleData.forEach(d => {
-                const px = d.x * width;
-                const py = d.y * height;
-                if(Math.sqrt((px-mouseX)**2 + (py-mouseY)**2) < 15) {
-                    tooltip.style.display = 'block';
-                    tooltip.style.left = (e.pageX + 10) + 'px';
-                    tooltip.style.top = (e.pageY + 10) + 'px';
-                    tooltip.style.borderLeft = `4px solid ${d.theme.main}`;
-                    tooltip.innerHTML = `<span class="font-bold">${d.id}코스</span>: ${d.name}`;
-                    found = true;
-                }
-            });
-            if(!found) tooltip.style.display = 'none';
-        });
-
-        window.addEventListener('resize', resize);
-        window.onload = resize;
-    </script>
-</body>
-</html>
+const val=id=>document.getElementById(id).value.trim();const setText=(id,t)=>document.getElementById(id).textContent=t;const safe=(id,fallback)=>val(id)||fallback;function updateOld(){const get=id=>document.getElementById(id)?.value?.trim()||'';const show=(id,value)=>setText(id,value||'＿＿＿＿');const drink=get('oldDrink'),priceRaw=get('oldPrice'),paidRaw=get('oldPaid');const price=Number(priceRaw),paid=Number(paidRaw);const valid=priceRaw!==''&&paidRaw!==''&&Number.isFinite(price)&&Number.isFinite(paid)&&price>=0&&paid>=0;show('oldDrinkView',drink);show('oldPriceView',priceRaw!==''?price.toLocaleString('ko-KR'):'');show('oldPaidView',paidRaw!==''?paid.toLocaleString('ko-KR'):'');show('oldDrinkCondView',get('oldDrinkCond')||'선택한 음료가 판매 목록에 있는가?');show('oldCondView',get('oldCond')||'투입 금액 ≥ 선택한 음료 가격');show('oldYesView',get('oldYes')||'선택한 음료와 계산한 잔돈 함께 배출');show('oldNoView',get('oldNo')||'금액 부족 안내');let status='음료와 가격, 투입 금액을 모두 입력해 주세요.';let calc='조건이 참일 때 잔돈 계산';let dispense='음료: ＿＿ / 잔돈: ＿＿원';let shortage='음료와 잔돈 배출 없음';if(!drink){status='첫 번째 조건: 아니오(거짓) → 음료를 선택해 주세요. 금액 판단과 배출은 실행하지 않습니다.';}else if(valid){if(paid>=price){const change=paid-price;calc=`${paid.toLocaleString('ko-KR')} − ${price.toLocaleString('ko-KR')} = ${change.toLocaleString('ko-KR')}원`;dispense=`🥤 ${drink} 배출 + 🪙 잔돈 ${change.toLocaleString('ko-KR')}원 반환`;status=`첫 번째 조건: 예 → 두 번째 조건: 예. ${drink}를 배출하고 잔돈 ${change.toLocaleString('ko-KR')}원을 함께 반환합니다.`;}else{const missing=price-paid;shortage=`${missing.toLocaleString('ko-KR')}원 부족 · 음료와 잔돈 배출 없음`;status=`첫 번째 조건: 예 → 두 번째 조건: 아니오. ${missing.toLocaleString('ko-KR')}원이 부족하여 음료와 잔돈을 배출하지 않습니다.`;}}show('oldCalcView',calc);setText('oldDispense',dispense);setText('oldShortage',shortage);setText('oldCheck',status)}function resetOld(){['oldDrink','oldPrice','oldPaid'].forEach(id=>{document.getElementById(id).value=''});document.getElementById('oldDrinkCond').value='선택한 음료가 판매 목록에 있는가?';document.getElementById('oldCond').value='투입 금액 ≥ 선택한 음료 가격';document.getElementById('oldYes').value='선택한 음료와 계산한 잔돈 함께 배출';document.getElementById('oldNo').value='금액 부족 안내';saveInputs();updateOld()}
+function updateDesign(){let a=safe('joyItem','행복 충전 아이템'),b=safe('sadItem','마음 회복 아이템'),c=safe('joyMsg','응원해!'),d=safe('sadMsg','괜찮아.');[['jiv',a],['siv',b],['jmv',c],['smv',d]].forEach(([id,t])=>setText(id,t));setText('pseudo',`시작\n  감정 표현 입력받기\n  AI 모델로 감정 분류하기\n  만일 (분류 결과 = 기쁨) 이라면\n      ${a} 배출\n      “${c}” 말하기\n      LED 웃는 얼굴 표시\n  아니면\n      ${b} 배출\n      “${d}” 말하기\n      LED 하트 표시\n종료`)}
+function csvEscape(s){return '"'+String(s).replaceAll('"','""')+'"'}function lines(id){return val(id).split(/\r?\n/).map(s=>s.trim()).filter(Boolean)}function dl(name,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}function downloadCSV(){let rows=[['감정표현','분류'],...lines('joyWords').map(w=>[w,'기쁨']),...lines('sadWords').map(w=>[w,'슬픔'])];dl('감정단어_연습데이터.csv',new Blob(['\ufeff'+rows.map(r=>r.map(csvEscape).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}))}function copyData(){const t=[...lines('joyWords').map(x=>x+'\t기쁨'),...lines('sadWords').map(x=>x+'\t슬픔')].join('\n');if(navigator.clipboard?.writeText){navigator.clipboard.writeText(t).then(()=>alert('복사했습니다. 공유 시트에 붙여넣으세요.')).catch(()=>fallbackCopy(t))}else fallbackCopy(t)}function fallbackCopy(t){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();alert('복사했습니다.')}
+const missions=['AI 분류 결과를 조건문에 연결하기','기쁨일 때 아이템 배출하기','슬픔일 때 아이템 배출하기','기쁨·슬픔에 맞는 메시지 말하기','마이크로비트 LED 웃는 얼굴·하트 출력'];document.getElementById('checks').innerHTML=missions.map((x,i)=>`<label><input type="checkbox" data-check="m${i}"> ${x}</label>`).join('');function updateProgress(){let n=missions.filter((_,i)=>document.querySelector(`[data-check="m${i}"]`).checked).length;document.getElementById('progress').style.width=(n/missions.length*100)+'%';setText('progressText',n+' / '+missions.length+' 완료')}
+const vmPatterns={joy:["00000","01010","00000","10001","01110"],sad:["01010","11111","11111","01110","00100"]};
+let vmTimer=[];function vmLater(fn,ms){vmTimer.push(setTimeout(fn,ms))}function vmDrawLED(type){const led=document.getElementById('vmLED');if(!led)return;led.innerHTML='';const pattern=vmPatterns[type]||["00000","00000","00000","00000","00000"];pattern.join('').split('').forEach(v=>{const d=document.createElement('span');d.className='vm-dot'+(v==='1'?' on':'');led.appendChild(d)})}
+function resetMachine(){vmTimer.forEach(clearTimeout);vmTimer=[];document.getElementById('vmGift').classList.remove('deliver');document.getElementById('vmGift').style.opacity='0';document.getElementById('vmMachine').classList.remove('vm-running');document.getElementById('vmRunBtn').disabled=false;vmDrawLED();setText('vmStatus','준비 완료 · 감정 표현을 입력해 주세요.');setText('vmSpeech','💬 어떤 선물이 나올까요?');setText('mockResult','입력한 감정 표현에 따라 아이템·메시지·LED가 달라집니다.');setText('vmAnalysis','🤖 분석 대기 중')}
+function classifyEmotion(input){
+  const t=input.replace(/\s+/g,'').toLowerCase();
+  const joys=['행복','기쁨','기뻐','기뻤','신나','신났','즐거','좋아','좋았','최고','설레','설렜','기대','뿌듯','감사','웃음','재미','재밌','사랑','만족','짜릿','성공','합격','축하','반가','희망'];
+  const sads=['슬퍼','슬픔','슬펐','속상','우울','걱정','불안','무서','두려','눈물','서운','외로','힘들','지쳤','실망','화나','짜증','답답','아프','괴로','상처','후회','실패','울고','우울해'];
+  const count=arr=>arr.reduce((n,w)=>n+(t.includes(w)?1:0),0);
+  const j=count(joys),d=count(sads);
+  if(!j&&!d)return {type:null,reason:'학습 예시에 없는 표현입니다. 다른 감정 표현으로 다시 입력해 보세요.'};
+  if(j===d)return {type:null,reason:'기쁨과 슬픔 표현이 함께 나타났어요. 한쪽으로 단정하지 않고 다시 입력해 보세요.'};
+  return {type:j>d?'joy':'sad',reason:j>d?'기쁨을 나타내는 표현이 더 많이 발견되었어요.':'슬픔을 나타내는 표현이 더 많이 발견되었어요.'};
+}
+function runMock(){
+  const input=document.getElementById('vmInput').value.trim();
+  if(!input){setText('vmStatus','감정 단어나 문장을 먼저 입력해 주세요.');document.getElementById('vmInput').focus();return}
+  resetMachine();updateDesign();
+  const result=classifyEmotion(input);
+  document.getElementById('vmRunBtn').disabled=true;
+  document.getElementById('vmMachine').classList.add('vm-running');
+  setText('vmStatus','입력 확인 → 텍스트 분석 중…');
+  setText('vmAnalysis','🧠 감정 표현을 분석하고 있어요…');
+  setText('vmSpeech','🤖 어떤 아이템을 준비할까요?');
+  vmLater(()=>{
+    if(!result.type){
+      setText('vmAnalysis','🔎 분류 보류 · '+result.reason);
+      setText('vmStatus','분류 보류 · 표현을 바꾸어 다시 시도해 주세요.');
+      setText('vmSpeech','💬 사람의 감정은 한 가지로만 나뉘지 않을 수 있어요.');
+      setText('mockResult','아이템 배출 없음 · 다른 문장으로 테스트해 보세요.');
+      document.getElementById('vmRunBtn').disabled=false;
+      document.getElementById('vmMachine').classList.remove('vm-running');return;
+    }
+    const joy=result.type==='joy';
+    const item=joy?safe('joyItem','행복 충전 아이템'):safe('sadItem','마음 회복 아이템');
+    const msg=joy?safe('joyMsg','행복 에너지 +100!'):safe('sadMsg','토닥토닥, 쉬어도 괜찮아.');
+    const gift=document.getElementById('vmGift');gift.textContent=joy?'🎁':'💝';
+    setText('vmAnalysis','🤖 감정 분류: '+(joy?'기쁨':'슬픔')+' · '+result.reason);
+    setText('vmStatus','조건문 실행 → '+(joy?'예(참)':'아니오(거짓)')+' 경로 → 아이템 준비');
+    vmLater(()=>{gift.classList.add('deliver');gift.style.opacity='1';setText('vmStatus','🎁 '+item+' 배출 중…')},450);
+    vmLater(()=>{
+      vmDrawLED(joy?'joy':'sad');setText('vmSpeech','💬 '+msg);
+      setText('mockResult',(joy?'🌟 기쁨':'💗 슬픔')+' → '+item+' 배출 · '+(joy?'😊 웃는 얼굴':'❤️ 하트')+' LED');
+      setText('vmStatus','완료! 다른 감정 표현도 입력해 보세요.');
+      document.getElementById('vmRunBtn').disabled=false;
+      document.getElementById('vmMachine').classList.remove('vm-running');
+    },1500);
+  },650);
+}
+function saveSVG(){updateDesign();const a=safe('joyItem','행복 충전 아이템'),b=safe('sadItem','마음 회복 아이템'),c=safe('joyMsg','응원해!'),d=safe('sadMsg','괜찮아.');const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="630" viewBox="0 0 900 630"><rect width="900" height="630" fill="#fff"/><style>text{font-family:Arial,'Malgun Gothic',sans-serif;fill:#172b50} .s{font-size:22px;font-weight:bold}.m{font-size:18px}
+/* Animated vending-machine classroom demonstration */
+.vm-layout{display:grid;grid-template-columns:minmax(240px,1fr) minmax(250px,1fr);gap:18px;align-items:start;margin:18px 0}.vm-machine{position:relative;max-width:370px;margin:auto;width:100%;height:440px;border:9px solid #20395e;border-radius:26px 26px 18px 18px;background:linear-gradient(140deg,#ffe477,#ffc849 55%,#f8ad51);box-shadow:inset -9px -7px #e99a3d,10px 14px 0 #d9e1ee;overflow:hidden}.vm-title{position:absolute;left:12%;top:15px;width:76%;border-radius:12px;background:#213d6d;color:white;text-align:center;padding:10px;font-weight:900;letter-spacing:1px}.vm-window{position:absolute;left:9%;top:77px;width:59%;height:190px;border:8px solid #20395e;border-radius:15px;background:linear-gradient(#e5f6ff,#b5ddf2);display:flex;align-items:center;justify-content:center;gap:10px;overflow:hidden}.vm-stock{font-size:58px;filter:drop-shadow(2px 5px 1px #6e8ca7)}.vm-controls{position:absolute;right:6%;top:95px;width:21%;display:flex;flex-direction:column;align-items:center;gap:12px}.vm-led{background:#243c62;border:5px solid #102c50;border-radius:10px;width:78px;height:78px;padding:7px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.vm-dot{background:#465c79;border-radius:50%;aspect-ratio:1}.vm-dot.on{background:#ffec6a;box-shadow:0 0 6px #fff5a1}.vm-key{background:#fff8df;border:3px solid #20395e;border-radius:9px;padding:8px 4px;font-weight:900;font-size:12px;text-align:center;width:72px}.vm-slot{position:absolute;bottom:31px;left:17%;width:66%;height:82px;border:10px solid #1b3358;background:#162b4c;border-radius:12px;box-shadow:inset 0 12px 8px #07192e;display:flex;align-items:center;justify-content:center}.vm-gift{font-size:54px;opacity:0;transform:translateY(-130px) scale(.6);filter:drop-shadow(0 5px 2px #091a34)}.vm-gift.deliver{animation:vmDrop 1.2s cubic-bezier(.22,.65,.3,1.2) forwards}.vm-speech{background:#fff;border:2px solid #cfddf1;border-radius:14px;padding:15px;min-height:75px;font-size:17px;font-weight:700}.vm-status{color:#3b537b;font-size:14px;margin:8px 0}.vm-label{font-size:12px;font-weight:800;color:#20395e}.vm-stage{border:1px solid #dce3ef;background:#f7faff;border-radius:18px;padding:18px}.vm-result{margin-top:12px;padding:12px;border-radius:12px;background:#eef4ff;min-height:48px}.vm-running{animation:vmPulse .7s ease-in-out 2}@keyframes vmDrop{0%{opacity:0;transform:translateY(-130px) scale(.6)}55%{opacity:1;transform:translateY(4px) scale(1.2)}78%{transform:translateY(-13px) scale(.95)}100%{opacity:1;transform:translateY(0) scale(1)}}@keyframes vmPulse{50%{filter:brightness(1.22)}}@media(max-width:740px){.vm-layout{grid-template-columns:1fr}.vm-machine{height:405px;max-width:330px}.vm-window{height:170px}.vm-controls{right:7%}.vm-led{width:65px;height:65px}.vm-key{width:62px}}
+</style><rect x="305" y="25" width="290" height="60" rx="12" fill="#e8eefc" stroke="#315aa3" stroke-width="2"/><text class="s" x="450" y="63" text-anchor="middle">감정 표현 입력</text><path d="M450 85V118" stroke="#315aa3" stroke-width="3"/><rect x="305" y="118" width="290" height="60" rx="12" fill="#e8eefc" stroke="#315aa3" stroke-width="2"/><text class="s" x="450" y="156" text-anchor="middle">AI 텍스트 분류</text><path d="M450 178V205" stroke="#315aa3" stroke-width="3"/><path d="M450 205L615 290L450 375L285 290Z" fill="#fff4ca" stroke="#c9941c" stroke-width="3"/><text class="s" x="450" y="297" text-anchor="middle">기쁨인가?</text><path d="M285 290H180V400M615 290H720V400" fill="none" stroke="#315aa3" stroke-width="3"/><text class="m" x="210" y="278">예</text><text class="m" x="663" y="278">아니오</text><rect x="35" y="400" width="340" height="145" rx="15" fill="#fff7d4" stroke="#d8b640" stroke-width="2"/><rect x="525" y="400" width="340" height="145" rx="15" fill="#fff0ee" stroke="#e78d82" stroke-width="2"/><text class="s" x="205" y="430" text-anchor="middle">기쁨</text><text class="m" x="205" y="465" text-anchor="middle">${esc(a.slice(0,20))}</text><text class="m" x="205" y="497" text-anchor="middle">${esc(c.slice(0,22))}</text><text class="m" x="205" y="529" text-anchor="middle">LED 웃는 얼굴</text><text class="s" x="695" y="430" text-anchor="middle">슬픔</text><text class="m" x="695" y="465" text-anchor="middle">${esc(b.slice(0,20))}</text><text class="m" x="695" y="497" text-anchor="middle">${esc(d.slice(0,22))}</text><text class="m" x="695" y="529" text-anchor="middle">LED 하트</text><path d="M205 545V580H450M695 545V580H450" fill="none" stroke="#315aa3" stroke-width="3"/><rect x="390" y="580" width="120" height="38" rx="19" fill="#e8eefc" stroke="#315aa3"/><text class="m" x="450" y="605" text-anchor="middle">종료</text></svg>`;dl('AI_감정자판기_순서도.svg',new Blob([svg],{type:'image/svg+xml;charset=utf-8'}))}
+function downloadRecord(){let result='AI 감정 토닥이 자판기 · 학생 활동 기록\n\n';document.querySelectorAll('[data-save]').forEach(e=>{const label=e.previousElementSibling?.textContent?.trim()||e.id;result+=label+'\n'+e.value+'\n\n'});result+='[필수 미션]\n'+missions.map((m,i)=>(document.querySelector(`[data-check="m${i}"]`).checked?'[완료] ':'[미완료] ')+m).join('\n');dl('AI_감정자판기_활동기록.txt',new Blob(['\ufeff'+result],{type:'text/plain;charset=utf-8'}))}
+function saveInputs(){const data={};document.querySelectorAll('[data-save]').forEach(e=>data[e.id]=e.value);document.querySelectorAll('[data-check]').forEach(e=>data['check_'+e.dataset.check]=e.checked);try{localStorage.setItem('aiVendingStudent_v1',JSON.stringify(data))}catch(e){}}function loadInputs(){try{const data=JSON.parse(localStorage.getItem('aiVendingStudent_v1')||'{}');document.querySelectorAll('[data-save]').forEach(e=>{if(data[e.id]!==undefined)e.value=data[e.id]});document.querySelectorAll('[data-check]').forEach(e=>e.checked=!!data['check_'+e.dataset.check])}catch(e){}updateOld();updateDesign();updateProgress()}document.addEventListener('input',saveInputs);document.addEventListener('change',e=>{saveInputs();if(e.target.matches('[data-check]'))updateProgress()});function clearAll(){if(confirm('이 브라우저에 저장된 활동 기록을 초기화할까요?')){localStorage.removeItem('aiVendingStudent_v1');location.reload()}}loadInputs();
+vmDrawLED();</script></body></html>
